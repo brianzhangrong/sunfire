@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 @Slf4j
 public class OpenTSDBLoggerStore<LoggerDO> extends AbstraceHbaseStore <LoggerDO> {
 
-    private static final String URL = "http://%s/api/put?summary";
+    private static final String URL = SunfireConstant.OPENTSDB_REQUEST_URL;
 
     public static void main(String[] args) {
         //
@@ -64,10 +64,11 @@ public class OpenTSDBLoggerStore<LoggerDO> extends AbstraceHbaseStore <LoggerDO>
 
                 try {
                     tagMap.put(contentList.get(0).toLowerCase(), "1");
-                    tagMap.put("ip", NetUtils.getLocalHostLANAddress().getHostAddress());
+                    tagMap.put(SunfireConstant.APP_IP,
+                            NetUtils.getLocalHostLANAddress().getHostAddress());
                     summary.setTags(tagMap);
                     summary.setTimestamp(String.valueOf(
-                            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+                            new SimpleDateFormat(SunfireConstant.DATE_FORMAT)
                                     .parse(data.getLoggerTime()).getTime()));
                     summary.setValue("1");
                     params.getList().add(summary);
