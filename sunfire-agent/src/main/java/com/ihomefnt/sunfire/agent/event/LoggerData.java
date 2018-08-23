@@ -41,35 +41,13 @@ public class LoggerData {
 
     String addrInfo;
 
+    /**
+     * dapper
+     */
     String traceId;
 
-    String $dbName;
-
-    String $rowKey;
-
-    String $openTSDB;
-
-    public String get$dbName() {
-        return $dbName;
-    }
-
-    public void set$dbName(String $dbName) {
-        this.$dbName = $dbName;
-    }
-
-    public String get$rowKey() {
-        return $rowKey;
-    }
-
-    public void set$rowKey(String $rowKey) {
-        this.$rowKey = $rowKey;
-    }
-
-    public String get$openTSDB() {
-        return $openTSDB;
-    }
-
-    public void set$openTSDB(String $openTSDB) {
-        this.$openTSDB = $openTSDB;
-    }
+    /**
+     * 应用上报ip
+     */
+    String ip;
 }

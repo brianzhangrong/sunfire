@@ -4,7 +4,6 @@ import com.ihomefnt.sunfire.agent.event.LoggerData;
 import com.ihomefnt.sunfire.agent.event.LoggerEventFactory;
 import com.ihomefnt.sunfire.agent.handler.LoggerEventHandler;
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 @Data
 public class LoggerRingBuffer extends AbstractRingBufferPublish <LoggerData> {
@@ -32,9 +31,6 @@ public class LoggerRingBuffer extends AbstractRingBufferPublish <LoggerData> {
         //        } finally {
         //            ringBuffer.publish(sequence);//发布事件；
         //        }
-        if (StringUtils.isEmpty(data.get$dbName())) {
-            data.set$dbName(dbName);
-        }
         super.publish(data);
 
     }

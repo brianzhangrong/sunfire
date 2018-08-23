@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+  <!--<conversionRule conversionWord="traceId" converterClass="com.ihomefnt.irayproxy.config.TraceIdConvertor" />-->
+  <!-- 文件输出日志 (文件大小策略进行文件输出，超过指定大小对文件备份) -->
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>|%d{yyyy-MM-dd HH:mm:ss.SSS}|%thread|%-5level|%logger{36}|%X{traceId}|->>>%msg%n
+      </pattern>
+    </layout>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
+    name="FILE">
+    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire-agent.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <FileNamePattern>
+        /opt/ihome/logs/tomcat/app/sunfire/sunfire-agent.log.%d{yyyy-MM-dd}.log
+      </FileNamePattern>
+    </rollingPolicy>
+    <layout>
+      <Pattern>|%d{yyyy-MM-dd HH:mm:ss.SSS}|%thread|%-5level|%logger{32}|%X{traceId}|->>>%msg%n
+      </Pattern>
+    </layout>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
+    name="TIMELOGFILE">
+    <File>/opt/ihome/logs/tomcat/app/irayproxy/sunfire-agent-time.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <FileNamePattern>/opt/ihome/logs/tomcat/app/sunfire/sunfire-agent-time.%d{yyyy-MM-dd}.log
+      </FileNamePattern>
+    </rollingPolicy>
+    <layout>
+      <Pattern>%msg%n</Pattern>
+    </layout>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
+    name="DEBUGINFOFILE">
+    <File>/opt/ihome/logs/tomcat/app/irayproxy/sunfire-agent-debug.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <FileNamePattern>/opt/ihome/logs/tomcat/app/sunfire/sunfire-agent-debug.%d{yyyy-MM-dd}.log
+      </FileNamePattern>
+    </rollingPolicy>
+    <layout>
+      <Pattern>|%d{yyyy-MM-dd HH:mm:ss.SSS}|%X{traceId}|->>>%msg%n</Pattern>
+    </layout>
+  </appender>
+
+  <logger additivity="false" level="DEBUG" name="timelogger">
+    <appender-ref ref="TIMELOGFILE"/>
+  </logger>
+  <logger additivity="false" level="DEBUG" name="debuginfologger">
+    <appender-ref ref="DEBUGINFOFILE"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
+  </root>
+</configuration>

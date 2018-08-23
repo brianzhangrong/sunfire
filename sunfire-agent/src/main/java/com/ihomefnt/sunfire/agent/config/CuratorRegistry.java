@@ -2,24 +2,16 @@ package com.ihomefnt.sunfire.agent.config;
 
 import static com.ihomefnt.sunfire.agent.utils.StringUtils.join;
 
-import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 import com.ihomefnt.sunfire.agent.config.WatchDataNotify.DataEvent;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.flume.Context;
 import org.apache.zookeeper.Watcher.Event.EventType;
 
 @Slf4j
 public class CuratorRegistry {
 
-    /*
-     * conf 配置agent监控那个appid
-     * */
-    public static final String APP_NAME = "appname";
-    /*
-     * conf配置agent的zookeeper地址
-     * */
-    public static final String ZOOKEEPR_ADDR = "zookeeper";
     /**
      * 分割符
      */
@@ -62,7 +54,6 @@ public class CuratorRegistry {
     /**
      * appid
      */
-    private static String appName;
     CuratorZookeeperClient client;
     /**
      * opentsdb地址，zk中，或者是flume.conf的配置文件中配置
@@ -74,15 +65,19 @@ public class CuratorRegistry {
      */
     String bodySplit = "->>>";
 
+    Map <String, ZkDataConfig> appConfig = Maps.newHashMap();
+
     DataChangedNotify dataChangedNotify = new DataChangedNotify();
 
-    public CuratorRegistry(Context context) {
-        appName = context.getString(APP_NAME);
-        String zookeeperAddr = context.getString(ZOOKEEPR_ADDR);
-        openTSDBUrl = context.getString(OPENTSDB);
+    public CuratorRegistry(String appName, String zookeeperAddr, String openTSDBUrl) {
+        if (!appConfig.containsKey(appName)) {
+            appConfig.put(appName, new ZkDataConfig());
+        }
+        ZkDataConfig config = appConfig.get(appName);
+        this.openTSDBUrl = openTSDBUrl;
         client = new CuratorZookeeperClient(zookeeperAddr);
         addStateListeners();
-        addSunfireRootZKPath();
+        addSunfireRootZKPath(appName);
     }
 
     public static String selectHBTableName(String sunfireHbaseTableNamePrefix, String s) {
@@ -96,34 +91,22 @@ public class CuratorRegistry {
         dataChangedNotify.addWatchDataNotify(event, notify);
     }
 
-    public String getOpenTSDBUrl() {
-        return openTSDBUrl;
-    }
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public String getBodySplit() {
-        return bodySplit;
-    }
 
     /**
      * zk 应用配置变更，watch监控， hbasename，日志内容分割符，opentsdb地址
      */
-    private void addSunfireRootZKPath() {
-        Preconditions.checkNotNull(appName);
+    private void addSunfireRootZKPath(String appName) {
 
         createIfNodeNotExist(SUNFIRE_PATH);
         //appid注册
-        createIfNodeNotExist(appId());
+        createIfNodeNotExist(appId(appName));
         //appid对应hb节点
 
         //opentsdb地址
         createIfNodeNotExist(appOSTBNode());
         client.setData(appOSTBNode(), openTSDBUrl);
         client.watchData(appOSTBNode(), (event) -> {
-            if (event.getType() == EventType.NodeDataChanged && (appOSTBNode())
+            if ((event.getType() == EventType.NodeDataChanged) && (appOSTBNode())
                     .equals(event.getPath())) {
                 openTSDBUrl = client.getData(event.getPath());
                 dataChangedNotify.notify(DataEvent.OSTB_CHANGED_EVENT, openTSDBUrl);
@@ -132,27 +115,27 @@ public class CuratorRegistry {
             }
         });
 
-        createIfNodeNotExist(appHbNode());
+        createIfNodeNotExist(appHbNode(appName));
         //appid对应hb内容
-        client.setData(appHbNode(), initAppHbName());
-        client.watchData(appHbNode(), (event) -> {
-            if (event.getType() == EventType.NodeDataChanged && (appHbNode())
+        client.setData(appHbNode(appName), initAppHbName(appName));
+        client.watchData(appHbNode(appName), (event) -> {
+            if ((event.getType() == EventType.NodeDataChanged) && (appHbNode(appName))
                     .equals(event.getPath())) {
                 tbName = client.getData(event.getPath());
-                dataChangedNotify.notify(DataEvent.HBTABLE_CHANGED_EVENT, initAppHbName());
+                dataChangedNotify.notify(DataEvent.HBTABLE_CHANGED_EVENT, initAppHbName(appName));
                 log.info("hbase table changed:{},path:{}", tbName, event.getPath());
 
             }
         });
         //appid对应的日志body分割符
-        createIfNodeNotExist(appBodySplitNode());
+        createIfNodeNotExist(appBodySplitNode(appName));
         //日志内容分割符
-        client.setData(appBodySplitNode(), bodySplit);
-        client.watchData(appBodySplitNode(), (event) -> {
-            if (event.getType() == EventType.NodeDataChanged && (appBodySplitNode())
+        client.setData(appBodySplitNode(appName), bodySplit);
+        client.watchData(appBodySplitNode(appName), (event) -> {
+            if (event.getType() == EventType.NodeDataChanged && (appBodySplitNode(appName))
                     .equals(event.getPath())) {
                 bodySplit = client.getData(event.getPath());
-                log.info("opentsdb changed:{},path:{}", tbName, event.getPath());
+                log.info("bodysplit changed:{},path:{}", tbName, event.getPath());
 
             }
         });
@@ -196,19 +179,19 @@ public class CuratorRegistry {
         });
     }
 
-    public String initAppHbName() {
+    public String initAppHbName(String appName) {
         return selectHBTableName(SUNFIRE_HBASE_TABLE_NAME_PREFIX, appName.toLowerCase());
     }
 
-    private String appId() {
+    private String appId(String appName) {
         return join(SUNFIRE_PATH, SPLIT, appName);
     }
 
-    private String appHbNode() {
-        return join(appId(), SPLIT, HBASE_NAME);
+    private String appHbNode(String appName) {
+        return join(appId(appName), SPLIT, HBASE_NAME);
     }
 
-    private String appBodySplitNode() {
-        return join(appId(), SPLIT, BODYSPLIT);
+    private String appBodySplitNode(String appName) {
+        return join(appId(appName), SPLIT, BODYSPLIT);
     }
 }

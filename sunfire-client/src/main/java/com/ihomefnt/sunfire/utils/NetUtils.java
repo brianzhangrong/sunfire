@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire.agent.utils;
+package com.ihomefnt.sunfire.utils;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
