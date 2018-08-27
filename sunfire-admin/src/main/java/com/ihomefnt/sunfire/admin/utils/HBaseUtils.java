@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire.utils;
+package com.ihomefnt.sunfire.admin.utils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

@@ -10,10 +10,10 @@
   </appender>
   <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
     name="FILE">
-    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire.log</File>
+    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire-admin.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <FileNamePattern>
-        /opt/ihome/logs/tomcat/app/sunfire/sunfire.log.%d{yyyy-MM-dd}.log
+        /opt/ihome/logs/tomcat/app/sunfire/sunfire-admin.log.%d{yyyy-MM-dd}.log
       </FileNamePattern>
     </rollingPolicy>
     <layout>
@@ -23,9 +23,9 @@
   </appender>
   <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
     name="TIMELOGFILE">
-    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire-time.log</File>
+    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire-admin-time.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>/opt/ihome/logs/tomcat/app/sunfire/sunfire-time.%d{yyyy-MM-dd}.log
+      <FileNamePattern>/opt/ihome/logs/tomcat/app/sunfire/sunfire-admin-time.%d{yyyy-MM-dd}.log
       </FileNamePattern>
     </rollingPolicy>
     <layout>
@@ -34,9 +34,9 @@
   </appender>
   <appender class="ch.qos.logback.core.rolling.RollingFileAppender"
     name="DEBUGINFOFILE">
-    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire-debug.log</File>
+    <File>/opt/ihome/logs/tomcat/app/sunfire/sunfire-admin-debug.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <FileNamePattern>/opt/ihome/logs/tomcat/app/sunfire/sunfire-debug.%d{yyyy-MM-dd}.log
+      <FileNamePattern>/opt/ihome/logs/tomcat/app/sunfire/sunfire-admin-debug.%d{yyyy-MM-dd}.log
       </FileNamePattern>
     </rollingPolicy>
     <layout>

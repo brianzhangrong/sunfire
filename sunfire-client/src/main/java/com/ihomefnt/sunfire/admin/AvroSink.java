@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire;
+package com.ihomefnt.sunfire.admin;
 
 import java.util.Properties;
 import org.apache.flume.api.RpcClient;

@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire.agent.bootConfig;
+package com.ihomefnt.sunfire.admin.config;
 
 import com.baidu.disconf.client.DisconfMgrBean;
 import com.baidu.disconf.client.DisconfMgrBeanSecond;
@@ -26,7 +26,7 @@ import org.springframework.core.io.Resource;
 
 @Configuration
 @Slf4j
-public class DisconfConfig implements EnvironmentAware {
+public class AdminDisconfConfig implements EnvironmentAware {
 
     public static final String PRD_ENV = "prd";
     public static final String SIT_ENV = "sit";
@@ -49,7 +49,7 @@ public class DisconfConfig implements EnvironmentAware {
     public DisconfMgrBean disconfMgrBean() {
         DisClientConfig.getInstance().ENABLE_DISCONF = true;
         DisconfMgrBean disconfMgrBean = new DisconfMgrBean();
-        disconfMgrBean.setScanPackage("com.ihomefnt.sunfire.agent");
+        disconfMgrBean.setScanPackage("com.ihomefnt.sunfire.admin");
         return disconfMgrBean;
     }
 
@@ -62,7 +62,7 @@ public class DisconfConfig implements EnvironmentAware {
     @ConditionalOnClass(DisconfMgrBean.class)
     public ReloadablePropertiesFactoryBean reloadFactoryBean() {
         ReloadablePropertiesFactoryBean bean = new ReloadablePropertiesFactoryBean();
-        bean.setLocations(Lists.newArrayList("classpath*:sunfire.properties"));
+        bean.setLocations(Lists.newArrayList("classpath*:sunfire-admin.properties"));
         return bean;
     }
 
@@ -75,11 +75,10 @@ public class DisconfConfig implements EnvironmentAware {
         configure.setIgnoreResourceNotFound(true);
         configure.setIgnoreUnresolvablePlaceholders(true);
         List <Resource> resourceLst = Lists.newArrayList();
-        resourceLst.add(new ClassPathResource("sunfire.properties"));
+        resourceLst.add(new ClassPathResource("classpath*:sunfire-admin.properties"));
         configure.setLocations(resourceLst.toArray(new Resource[]{}));
         configure.setProperties(factoryBean.getObject());
         addPropertiesPropertySource("disconfReloadableProperties", factoryBean.getObject());
-        configure.afterPropertiesSet();
         return configure;
     }
 

@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire.constants;
+package com.ihomefnt.sunfire.admin.constants;
 
 public class SunfireClientContants {
 

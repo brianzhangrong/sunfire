@@ -1,11 +1,11 @@
-package com.ihomefnt.sunfire;
+package com.ihomefnt.sunfire.admin;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.UnmodifiableIterator;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.ihomefnt.sunfire.utils.NetUtils;
+import com.ihomefnt.sunfire.admin.utils.NetUtils;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;

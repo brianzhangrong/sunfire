@@ -1,7 +1,5 @@
 package com.ihomefnt.sunfire.agent.store;
 
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.join;
-
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -36,7 +34,7 @@ public class OpenTSDBMetricStore {
     @Resource
     SunfireProperties sunfireProperties;
 
-    public void put(String apppName, String ip, LoggerData data, String openTSDB) {
+    public void put(String apppName, String ip, LoggerData data) {
             OpenTSDBParams <OpenTSDBSummary> params = new OpenTSDBParams <>();
             OpenTSDBSummary summary = new OpenTSDBSummary();
             Map <String, String> tagMap = Maps.newHashMap();
@@ -45,7 +43,8 @@ public class OpenTSDBMetricStore {
             List <String> contentList = Lists.newArrayList(
                     Splitter.on(SunfireConstant.LOG_SPLIT).split(data.getLoggerContent()));
             //metrics
-            summary.setMetric(join(apppName.toLowerCase(), ".", contentList.get(0).toLowerCase()));
+            summary.setMetric(com.ihomefnt.sunfire.agent.utils.StringUtils
+                    .join(apppName.toLowerCase(), ".", contentList.get(0).toLowerCase()));
 
             try {
                 //tag

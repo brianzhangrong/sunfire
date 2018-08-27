@@ -1,17 +1,11 @@
 package com.ihomefnt.sunfire.agent.kafka;
 
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.dateToRowkey;
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.getHBaseNameByAppId;
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.humpToUnderline;
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.join;
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.now;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.ihomefnt.sunfire.admin.constants.SunfireClientContants;
 import com.ihomefnt.sunfire.agent.constant.SunfireConstant;
 import com.ihomefnt.sunfire.agent.event.LoggerData;
 import com.ihomefnt.sunfire.agent.store.OpenTSDBMetricStore;
-import com.ihomefnt.sunfire.constants.SunfireClientContants;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
@@ -50,17 +44,16 @@ public class SunfireKafkaSinkConsumer {
             String key = (String) record.key();
             String ip = getClientIpByHeader(key, SunfireClientContants.IP_HEADER);
             String appName = getClientIpByHeader(key, SunfireClientContants.APP_NAME);
-            log.info("message in ip:{},appName:{}, message:{}", ip, appName, message);
 
             LoggerData data = new LoggerData();
             data.setAppName(appName);
-            data.setCreateTime(now());
+            data.setCreateTime(com.ihomefnt.sunfire.agent.utils.StringUtils.now());
             data.setSplitExpress("");
             data.setIp(ip);
             //rowkey作为reginserver的分区管理  日志发生时间+6位随机数
             String rowName = "";
             insertHBaseLogContent(message, appName, data);
-            openTSDBMetricStore.put(appName, ip, data, "localhost:4242");
+            openTSDBMetricStore.put(appName, ip, data);
         }
 
     }
@@ -71,7 +64,7 @@ public class SunfireKafkaSinkConsumer {
                 .newArrayList(Splitter.on(SunfireConstant.LOG_SPLIT).split(message));
         if (!CollectionUtils.isEmpty(bodyList) && bodyList.size() > 1) {
             //yyyy-MM-dd  hh:mm:ss.SSS 作为rowkey +6位的数字，不足位补0
-            rowName = dateToRowkey(bodyList.get(1));
+            rowName = com.ihomefnt.sunfire.agent.utils.StringUtils.dateToRowkey(bodyList.get(1));
             data.setLoggerTime(bodyList.get(1));
             //线程名
             data.setBizName(bodyList.get(2));
@@ -82,7 +75,8 @@ public class SunfireKafkaSinkConsumer {
             data.setTraceId(bodyList.get(5));
             Field[] fields = data.getClass().getDeclaredFields();
 
-            rowName = join(rowName, org.apache.commons.lang.StringUtils
+            rowName = com.ihomefnt.sunfire.agent.utils.StringUtils
+                    .join(rowName, org.apache.commons.lang.StringUtils
                     .leftPad(String.valueOf(sequence.getAndIncrement()),
                             String.valueOf(SunfireConstant.SEQUENCE).length(), '0'));
             if (sequence.compareAndSet(SunfireConstant.SEQUENCE, 0)) {
@@ -94,13 +88,12 @@ public class SunfireKafkaSinkConsumer {
                 if (StringUtils.isEmpty(fieldName) || fieldName.contains("$")) {
                     continue;
                 }
-                String qualifierName = humpToUnderline(fieldName);
+                String qualifierName = com.ihomefnt.sunfire.agent.utils.StringUtils
+                        .humpToUnderline(fieldName);
                 Object value = ReflectionUtils.getField(field, data);
                 String colValue = value == null ? "" : String.valueOf(value);
-                log.warn("store data qualifierName:{},insert colValue:{}",
-                        new Object[]{qualifierName, colValue});
-                hbaseTemplate
-                        .put(getHBaseNameByAppId(appName), rowName, getFamilyName(), qualifierName,
+                hbaseTemplate.put(com.ihomefnt.sunfire.agent.utils.StringUtils
+                                .getHBaseNameByAppId(appName), rowName, getFamilyName(), qualifierName,
                                 colValue.getBytes());
             }
         }

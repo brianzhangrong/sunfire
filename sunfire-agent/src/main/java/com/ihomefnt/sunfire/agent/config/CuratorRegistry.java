@@ -1,7 +1,5 @@
 package com.ihomefnt.sunfire.agent.config;
 
-import static com.ihomefnt.sunfire.agent.utils.StringUtils.join;
-
 import com.google.common.collect.Maps;
 import com.ihomefnt.sunfire.agent.config.WatchDataNotify.DataEvent;
 import java.util.Map;
@@ -27,12 +25,14 @@ public class CuratorRegistry {
     /*
      * zk root目录
      * */
-    public static final String SUNFIRE_PATH = join(SPLIT, SUNFIRE);
+    public static final String SUNFIRE_PATH = com.ihomefnt.sunfire.agent.utils.StringUtils
+            .join(SPLIT, SUNFIRE);
 
     /**
      * zk tsdb zk路径
      */
-    public static final String SUNFIRE_OPENSTSDB = join(SUNFIRE_PATH, SPLIT, OPENTSDB);
+    public static final String SUNFIRE_OPENSTSDB = com.ihomefnt.sunfire.agent.utils.StringUtils
+            .join(SUNFIRE_PATH, SPLIT, OPENTSDB);
     /*
      *
      * zk hbase存放路径
@@ -42,7 +42,8 @@ public class CuratorRegistry {
      *
      * zk hbase table name 前缀
      * */
-    public static final String SUNFIRE_HBASE_TABLE_NAME_PREFIX = join(SUNFIRE, "_");
+    public static final String SUNFIRE_HBASE_TABLE_NAME_PREFIX = com.ihomefnt.sunfire.agent.utils.StringUtils
+            .join(SUNFIRE, "_");
     /**
      * 日志内容分割符，在zk中可配置
      */
@@ -84,7 +85,7 @@ public class CuratorRegistry {
         if (StringUtils.isNotBlank(tbName)) {
             return tbName;
         }
-        return join(sunfireHbaseTableNamePrefix, s);
+        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(sunfireHbaseTableNamePrefix, s);
     }
 
     public void addDataChangedNotify(DataEvent event, WatchDataNotify notify) {
@@ -184,14 +185,14 @@ public class CuratorRegistry {
     }
 
     private String appId(String appName) {
-        return join(SUNFIRE_PATH, SPLIT, appName);
+        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(SUNFIRE_PATH, SPLIT, appName);
     }
 
     private String appHbNode(String appName) {
-        return join(appId(appName), SPLIT, HBASE_NAME);
+        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(appId(appName), SPLIT, HBASE_NAME);
     }
 
     private String appBodySplitNode(String appName) {
-        return join(appId(appName), SPLIT, BODYSPLIT);
+        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(appId(appName), SPLIT, BODYSPLIT);
     }
 }

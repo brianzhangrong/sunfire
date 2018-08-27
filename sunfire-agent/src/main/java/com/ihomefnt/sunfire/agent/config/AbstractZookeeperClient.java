@@ -10,14 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractZookeeperClient<TargetChildListener> implements ZookeeperClient {
 
-    private final Set<StateListener> stateListeners = new CopyOnWriteArraySet<StateListener>();
+    private final Set <StateListener> stateListeners = new CopyOnWriteArraySet <>();
 
-    private final ConcurrentMap<String, ConcurrentMap<ChildListener, TargetChildListener>>
-            childListeners =
-            new ConcurrentHashMap<String, ConcurrentMap<ChildListener, TargetChildListener>>();
+    private final ConcurrentMap <String, ConcurrentMap <ChildListener, TargetChildListener>> childListeners = new ConcurrentHashMap <>();
 
     private volatile boolean closed = false;
 
+    @Override
     public void create(String path, boolean ephemeral) {
         if (!ephemeral) {
             if (checkExists(path)) {
@@ -35,10 +34,12 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
         }
     }
 
+    @Override
     public void addStateListener(StateListener listener) {
         stateListeners.add(listener);
     }
 
+    @Override
     public void removeStateListener(StateListener listener) {
         stateListeners.remove(listener);
     }
@@ -47,11 +48,11 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
         return stateListeners;
     }
 
-    public List<String> addChildListener(String path, final ChildListener listener) {
+    @Override
+    public List <String> addChildListener(String path, ChildListener listener) {
         ConcurrentMap<ChildListener, TargetChildListener> listeners = childListeners.get(path);
         if (listeners == null) {
-            childListeners
-                    .putIfAbsent(path, new ConcurrentHashMap<ChildListener, TargetChildListener>());
+            childListeners.putIfAbsent(path, new ConcurrentHashMap <>());
             listeners = childListeners.get(path);
         }
         TargetChildListener targetListener = listeners.get(listener);
@@ -62,6 +63,7 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
         return addTargetChildListener(path, targetListener);
     }
 
+    @Override
     public void removeChildListener(String path, ChildListener listener) {
         ConcurrentMap<ChildListener, TargetChildListener> listeners = childListeners.get(path);
         if (listeners != null) {
@@ -78,6 +80,7 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
         }
     }
 
+    @Override
     public void close() {
         if (closed) {
             return;
@@ -106,5 +109,6 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
 
     protected abstract void removeTargetChildListener(String path, TargetChildListener listener);
 
+    @Override
     public abstract void setData(String path, String data);
 }

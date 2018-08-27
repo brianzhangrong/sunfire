@@ -1,6 +1,6 @@
-package com.ihomefnt.sunfire.config;
+package com.ihomefnt.sunfire.admin.config;
 
-import com.ihomefnt.sunfire.utils.SunfireConstant;
+import com.ihomefnt.sunfire.admin.utils.SunfireConstant;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

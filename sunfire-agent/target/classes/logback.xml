@@ -48,9 +48,23 @@
     <appender-ref ref="TIMELOGFILE"/>
   </logger>
   <logger additivity="false" level="DEBUG" name="debuginfologger">
-    <appender-ref ref="DEBUGINFOFILE"/>
+    <appender-ref ref="TIMELOGFILE"/>
   </logger>
-
+  o.a.h.h.c.ConnectionManager$HConnectionImplementation
+  <logger additivity="false" level="WARN" name="org.apache.zookeeper.ClientCnxn">
+    <appender-ref ref="TIMELOGFILE"/>
+  </logger>
+  <logger additivity="false" level="WARN" name="org.apache.zookeeper.ZooKeeper">
+    <appender-ref ref="TIMELOGFILE"/>
+  </logger>
+  <logger additivity="false" level="WARN"
+    name="org.apache.hadoop.hbase.zookeeper.RecoverableZooKeeper">
+    <appender-ref ref="TIMELOGFILE"/>
+  </logger>
+  <logger additivity="false" level="WARN"
+    name="org.apache.hadoop.hbase.client.ConnectionManager$HConnectionImplementation">
+    <appender-ref ref="TIMELOGFILE"/>
+  </logger>
   <root level="INFO">
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="FILE"/>

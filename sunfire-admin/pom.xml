@@ -16,11 +16,6 @@
       <artifactId>spring-boot</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.ihomefnt.sunfire</groupId>
-      <artifactId>sunfire-agent</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>QLExpress</artifactId>
     </dependency>
@@ -190,6 +185,18 @@
     <dependency>
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka_2.10</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.baidu.disconf</groupId>
+      <artifactId>disconf-client</artifactId>
     </dependency>
   </dependencies>
   <build>

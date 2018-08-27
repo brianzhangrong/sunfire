@@ -19,7 +19,7 @@ public class StringUtils {
         String ret = date;
         if (org.apache.commons.lang.StringUtils.isNotBlank(date)) {
             for (String remove : SunfireConstant.DATE_REMOVE_KEY) {
-                ret = ret.replaceAll(remove, "");
+                ret = ret.replace(remove, "");
             }
             return ret;
         }

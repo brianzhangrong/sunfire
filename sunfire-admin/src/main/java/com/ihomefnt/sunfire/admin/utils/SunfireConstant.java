@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire.utils;
+package com.ihomefnt.sunfire.admin.utils;
 
 public class SunfireConstant {
 

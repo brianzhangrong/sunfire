@@ -1,4 +1,4 @@
-package com.ihomefnt.sunfire;
+package com.ihomefnt.sunfire.admin;
 
 import static org.apache.flume.sink.kafka.KafkaSinkConstants.BATCH_SIZE;
 import static org.apache.flume.sink.kafka.KafkaSinkConstants.BOOTSTRAP_SERVERS_CONFIG;
@@ -18,8 +18,8 @@ import static org.apache.flume.sink.kafka.KafkaSinkConstants.TOPIC_CONFIG;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
-import com.ihomefnt.sunfire.constants.SunfireClientContants;
-import com.ihomefnt.sunfire.utils.NetUtils;
+import com.ihomefnt.sunfire.admin.constants.SunfireClientContants;
+import com.ihomefnt.sunfire.admin.utils.NetUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
