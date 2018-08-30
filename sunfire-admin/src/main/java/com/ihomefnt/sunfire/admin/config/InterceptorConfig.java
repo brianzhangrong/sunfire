@@ -1,6 +1,6 @@
 package com.ihomefnt.sunfire.admin.config;
 
-import com.ihomefnt.sunfire.admin.utils.SunfireConstant;
+import com.ihomefnt.sunfire.config.constant.SunfireConstant;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,13 +41,14 @@ public class InterceptorConfig extends WebMvcConfigurerAdapter {
     class TraceIdInterceptor implements HandlerInterceptor {
 
         @Override
-        public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2,
+        public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                Object obj,
                 Exception arg3) throws Exception {
             MDC.remove(SunfireConstant.TRACE_ID);
         }
 
         @Override
-        public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2,
+        public void postHandle(HttpServletRequest request, HttpServletResponse response, Object obj,
                 ModelAndView arg3) throws Exception {
 
         }

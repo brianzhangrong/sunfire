@@ -1,18 +1,18 @@
 package com.ihomefnt.sunfire.agent.store;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ihomefnt.sunfire.agent.bootConfig.SunfireProperties;
-import com.ihomefnt.sunfire.agent.constant.SunfireConstant;
 import com.ihomefnt.sunfire.agent.event.LoggerData;
 import com.ihomefnt.sunfire.agent.store.OpenTSDBParams.OpenTSDBSummary;
+import com.ihomefnt.sunfire.config.constant.SunfireConstant;
+import com.ihomefnt.sunfire.hbase.model.Regular;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
@@ -34,20 +34,21 @@ public class OpenTSDBMetricStore {
     @Resource
     SunfireProperties sunfireProperties;
 
-    public void put(String apppName, String ip, LoggerData data) {
+    public void put(String apppName, String ip, LoggerData data, List <Regular> regularList) {
             OpenTSDBParams <OpenTSDBSummary> params = new OpenTSDBParams <>();
             OpenTSDBSummary summary = new OpenTSDBSummary();
             Map <String, String> tagMap = Maps.newHashMap();
-        if (!StringUtils.isEmpty(data.getLoggerContent()) && data.getLoggerContent()
-                .contains(SunfireConstant.LOG_SPLIT)) {
-            List <String> contentList = Lists.newArrayList(
-                    Splitter.on(SunfireConstant.LOG_SPLIT).split(data.getLoggerContent()));
-            //metrics
-            summary.setMetric(com.ihomefnt.sunfire.agent.utils.StringUtils
-                    .join(apppName.toLowerCase(), ".", contentList.get(0).toLowerCase()));
+        String message = data.getLoggerContent();
+        if (!StringUtils.isEmpty(message)) {
+
+            String valueJoin = regularList.stream().map(regular -> regular.getValue())
+                    .collect(Collectors.joining("."));
+            // metrics
+            summary.setMetric(com.ihomefnt.sunfire.config.utils.StringUtils
+                    .join(apppName.toLowerCase(), ".", valueJoin));
 
             try {
-                //tag
+                // tag
                 tagMap.put(SunfireConstant.APP_IP, ip);
                 summary.setTags(tagMap);
                 summary.setTimestamp(String.valueOf(
@@ -61,9 +62,10 @@ public class OpenTSDBMetricStore {
                 e.printStackTrace();
                 log.error("ex:{}", ExceptionUtils.getStackTrace(e));
             }
-        }
+            }
 
     }
+
 
     private void postDataToTSDB(OpenTSDBParams <OpenTSDBSummary> params) throws IOException {
 

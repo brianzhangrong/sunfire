@@ -25,13 +25,13 @@ public class CuratorRegistry {
     /*
      * zk root目录
      * */
-    public static final String SUNFIRE_PATH = com.ihomefnt.sunfire.agent.utils.StringUtils
+    public static final String SUNFIRE_PATH = com.ihomefnt.sunfire.config.utils.StringUtils
             .join(SPLIT, SUNFIRE);
 
     /**
      * zk tsdb zk路径
      */
-    public static final String SUNFIRE_OPENSTSDB = com.ihomefnt.sunfire.agent.utils.StringUtils
+    public static final String SUNFIRE_OPENSTSDB = com.ihomefnt.sunfire.config.utils.StringUtils
             .join(SUNFIRE_PATH, SPLIT, OPENTSDB);
     /*
      *
@@ -42,7 +42,7 @@ public class CuratorRegistry {
      *
      * zk hbase table name 前缀
      * */
-    public static final String SUNFIRE_HBASE_TABLE_NAME_PREFIX = com.ihomefnt.sunfire.agent.utils.StringUtils
+    public static final String SUNFIRE_HBASE_TABLE_NAME_PREFIX = com.ihomefnt.sunfire.config.utils.StringUtils
             .join(SUNFIRE, "_");
     /**
      * 日志内容分割符，在zk中可配置
@@ -85,7 +85,7 @@ public class CuratorRegistry {
         if (StringUtils.isNotBlank(tbName)) {
             return tbName;
         }
-        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(sunfireHbaseTableNamePrefix, s);
+        return com.ihomefnt.sunfire.config.utils.StringUtils.join(sunfireHbaseTableNamePrefix, s);
     }
 
     public void addDataChangedNotify(DataEvent event, WatchDataNotify notify) {
@@ -185,14 +185,15 @@ public class CuratorRegistry {
     }
 
     private String appId(String appName) {
-        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(SUNFIRE_PATH, SPLIT, appName);
+        return com.ihomefnt.sunfire.config.utils.StringUtils.join(SUNFIRE_PATH, SPLIT, appName);
     }
 
     private String appHbNode(String appName) {
-        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(appId(appName), SPLIT, HBASE_NAME);
+        return com.ihomefnt.sunfire.config.utils.StringUtils
+                .join(appId(appName), SPLIT, HBASE_NAME);
     }
 
     private String appBodySplitNode(String appName) {
-        return com.ihomefnt.sunfire.agent.utils.StringUtils.join(appId(appName), SPLIT, BODYSPLIT);
+        return com.ihomefnt.sunfire.config.utils.StringUtils.join(appId(appName), SPLIT, BODYSPLIT);
     }
 }

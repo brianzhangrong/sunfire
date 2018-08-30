@@ -198,6 +198,33 @@
       <groupId>com.baidu.disconf</groupId>
       <artifactId>disconf-client</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.ihomefnt.sunfire</groupId>
+      <artifactId>sunfire-config</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ihomefnt.sunfire</groupId>
+      <artifactId>sunfire-hbase</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>

@@ -1,7 +1,7 @@
-package com.ihomefnt.sunfire.agent.utils;
+package com.ihomefnt.sunfire.config.utils;
 
 import com.google.common.base.Preconditions;
-import com.ihomefnt.sunfire.agent.constant.SunfireConstant;
+import com.ihomefnt.sunfire.config.constant.SunfireConstant;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,6 +13,23 @@ public class StringUtils {
             builder.append(tmp);
         }
         return builder.toString();
+    }
+
+    public static Integer searchIndexInMessage(String msg, String key, Integer position) {
+        //第一个出现的索引位置
+        int cursor = 1;
+        int index = msg.indexOf(key);
+        if (cursor == position) {
+            return index;
+        }
+        while (index != -1) {
+            index = msg.indexOf(key, index + 1);//*从这个索引往后开始第一个出现的位置
+            cursor++;
+            if (cursor == position) {
+                return index;
+            }
+        }
+        return -1;
     }
 
     public static String dateToRowkey(String date) {
@@ -34,6 +51,10 @@ public class StringUtils {
         return join("sunfire", "_", appName).toLowerCase();
     }
 
+    public static String selectTopicName(String appName) {
+        return join("sunfire", appName).toLowerCase();
+    }
+
 
     public static String humpToUnderline(String para) {
         Preconditions.checkNotNull(para);
@@ -50,7 +71,9 @@ public class StringUtils {
 
     public static void main(String[] args) {
         //
-        System.out.println(org.apache.commons.lang.StringUtils
-                .leftPad("1", String.valueOf(SunfireConstant.SEQUENCE).length(), '0'));
+//        System.out.println(org.apache.commons.lang.StringUtils
+//                .leftPad("1", String.valueOf(SunfireConstant.SEQUENCE).length(), '0'));
+        System.out.println(searchIndexInMessage("a|b|c", "|", 2));
+
     }
 }

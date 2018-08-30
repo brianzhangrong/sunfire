@@ -251,6 +251,17 @@
       <artifactId>disconf-client</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.ihomefnt.sunfire</groupId>
+      <artifactId>sunfire-hbase</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ihomefnt.sunfire</groupId>
+      <artifactId>sunfire-config</artifactId>
+      <version>1.0.0</version>
+    </dependency>
 
   </dependencies>
 
