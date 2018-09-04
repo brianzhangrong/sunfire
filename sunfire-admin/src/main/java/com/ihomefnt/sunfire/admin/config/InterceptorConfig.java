@@ -65,9 +65,14 @@ public class InterceptorConfig extends WebMvcConfigurerAdapter {
                         traceId = UUID.randomUUID().toString().replaceAll("-", "");
                     }
                 }
-                log.info("init traceId:{}，{}", traceId, Thread.currentThread().getId());
+                log.info("init traceId:{}，tid:{},method:{}", traceId,
+                        Thread.currentThread().getId(), request.getMethod());
                 MDC.put(SunfireConstant.TRACE_ID, traceId);
             }
+//            if(request.getMethod().equalsIgnoreCase("options")){
+//                log.info("method:{}",)
+//                return false;
+//            }
             return true;
         }
 

@@ -62,7 +62,7 @@ public class OpenTSDBMetricStore {
                 e.printStackTrace();
                 log.error("ex:{}", ExceptionUtils.getStackTrace(e));
             }
-            }
+        }
 
     }
 
