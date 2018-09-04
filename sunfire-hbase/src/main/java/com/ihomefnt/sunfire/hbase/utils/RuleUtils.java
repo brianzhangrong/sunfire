@@ -22,8 +22,10 @@ public class RuleUtils {
                 continue;
             }
             //命中一组规则即可录入opentsdb，hbase
-            fixedRule |= regular.getValue()
-                    .equals(message.substring(begin + regular.getValue().length() - 1, end));
+            if (regular.getValue().equals(message
+                    .substring(begin + regular.getBeginSplitSymbol().length(), end))) {
+                return Boolean.TRUE;
+            }
         }
         return fixedRule;
     }
